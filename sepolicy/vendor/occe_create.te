@@ -1,0 +1,22 @@
+# occe_create — OCCE shader-cache precompiler.
+# oneshot service (occe_create.rc, class main, post-fs-data) that loads libsaveshaderbin.so
+# and precompiles OCCE shaders into /mnt/occe/shader/fb_binary, feeding the selfie
+# blur/retouch + portrait-bokeh SDK init (avoids runtime shader-compile / mInit failures).
+#
+# Defined from the OOS file_contexts (occe_create_exec) + occe_create.rc service def.
+type occe_create, domain;
+type occe_create_exec, exec_type, vendor_file_type, file_type;
+init_daemon_domain(occe_create)
+
+# write the precompiled shader cache it owns
+allow occe_create occe_data_file:dir  create_dir_perms;
+allow occe_create occe_data_file:file create_file_perms;
+
+# GPU/EGL for shader compilation
+allow occe_create gpu_device:chr_file rw_file_perms;
+
+# load its own camera libs (libsaveshaderbin / libocce3a) from the HAL namespace
+allow occe_create same_process_hal_file:file { read open getattr execute map };
+
+# OOS-observed, non-fatal: occe_create probes servicemanager and is denied even on stock
+dontaudit occe_create servicemanager:binder call;

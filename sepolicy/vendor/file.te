@@ -1,2 +1,5 @@
 type public_adsprpcd_file, file_type;
 type proc_ufs_file, fs_type, proc_type;
+
+# OCCE shader-cache output tree (/mnt/occe/{shader,cache})
+type occe_data_file, file_type, data_file_type;
