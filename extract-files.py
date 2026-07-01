@@ -24,6 +24,24 @@ from pathlib import Path
 import glob
 import re
 
+from apk_fixups_op15 import (
+    blob_fixup_add_oplus_camera_stubs,
+    blob_fixup_apktool_unpack_full,
+    blob_fixup_cryptoeng_init_rc,
+    blob_fixup_cryptoeng_manifest,
+    blob_fixup_cryptoeng_permissions_xml,
+    blob_fixup_fileencryption_biometric_enrollment,
+    blob_fixup_fileencryption_permissions,
+    blob_fixup_filemanager_cut_same_disk,
+    blob_fixup_filemanager_select_dir_fallback,
+    blob_fixup_filemanager_skip_osense_scene,
+    blob_fixup_phonemanager_permission_controller,
+    blob_fixup_phonemanager_permissions,
+    blob_fixup_phonemanager_settings_category,
+    blob_fixup_ums_permissions,
+)
+from apk_permissions_op15 import blob_fixup_securitypermission_safe_permissions
+
 
 def lib_fixup_system_ext_suffix(lib: str, partition: str, *args, **kwargs):
     """
@@ -187,6 +205,48 @@ blob_fixups = {
         .call(blob_fixup_opluscamera_strip_oem_perms)
         .apktool_pack()
         .stripzip(),
+    'system_ext/app/FileManager/FileManager.apk': blob_fixup()
+        .call(blob_fixup_apktool_unpack_full)
+        .call(blob_fixup_add_oplus_camera_stubs)
+        .call(blob_fixup_filemanager_select_dir_fallback)
+        .call(blob_fixup_filemanager_cut_same_disk)
+        .call(blob_fixup_filemanager_skip_osense_scene)
+        .apktool_pack()
+        .stripzip(),
+    'system_ext/priv-app/UMS/UMS.apk': blob_fixup()
+        .call(blob_fixup_apktool_unpack_full)
+        .call(blob_fixup_add_oplus_camera_stubs)
+        .call(blob_fixup_ums_permissions)
+        .apktool_pack()
+        .stripzip(),
+    'system_ext/priv-app/FileEncryption/FileEncryption.apk': blob_fixup()
+        .call(blob_fixup_apktool_unpack_full)
+        .call(blob_fixup_add_oplus_camera_stubs)
+        .call(blob_fixup_fileencryption_permissions)
+        .call(blob_fixup_fileencryption_biometric_enrollment)
+        .apktool_pack()
+        .stripzip(),
+    'system_ext/app/SecurityPermission/SecurityPermission.apk': blob_fixup()
+        .call(blob_fixup_apktool_unpack_full)
+        .call(blob_fixup_securitypermission_safe_permissions)
+        .apktool_pack()
+        .stripzip(),
+    'system_ext/priv-app/PhoneManager/PhoneManager.apk': blob_fixup()
+        .call(blob_fixup_apktool_unpack_full)
+        .call(blob_fixup_add_oplus_camera_stubs)
+        .call(blob_fixup_phonemanager_permissions)
+        .call(blob_fixup_phonemanager_settings_category)
+        .call(blob_fixup_phonemanager_permission_controller)
+        .apktool_pack()
+        .stripzip(),
+    'system_ext/etc/permissions/vendor-oplus-hardware-cryptoeng.xml': blob_fixup()
+        .call(blob_fixup_cryptoeng_permissions_xml),
+    'odm/etc/permissions/vendor-oplus-hardware-cryptoeng.xml': blob_fixup()
+        .call(blob_fixup_cryptoeng_permissions_xml),
+    'odm/etc/init/vendor.oplus.hardware.cryptoeng@1.0-service_FDE.rc': blob_fixup()
+        .call(blob_fixup_cryptoeng_init_rc),
+    'odm/etc/vintf/manifest/manifest_oplus_cryptoeng.xml': blob_fixup()
+        .call(blob_fixup_cryptoeng_manifest),
 }  # fmt: skip
 
 namespace_imports = [
