@@ -20,3 +20,10 @@ allow occe_create same_process_hal_file:file { read open getattr execute map };
 
 # OOS-observed, non-fatal: occe_create probes servicemanager and is denied even on stock
 dontaudit occe_create servicemanager:binder call;
+
+# occe probes camera + graphics config props to select the shader-cache variant
+# (benign getprop reads; were permissive=0 avc spam at post-fs-data boot).
+get_prop(occe_create, vendor_camera_prop)
+get_prop(occe_create, graphics_config_prop)
+get_prop(occe_create, graphics_config_writable_prop)
+dontaudit occe_create default_prop:file r_file_perms;
