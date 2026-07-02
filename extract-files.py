@@ -35,12 +35,13 @@ from apk_fixups_op15 import (
     blob_fixup_filemanager_cut_same_disk,
     blob_fixup_filemanager_select_dir_fallback,
     blob_fixup_filemanager_skip_osense_scene,
-    blob_fixup_oppogallery_wallpaper_attach_intent,
     blob_fixup_phonemanager_permission_controller,
     blob_fixup_phonemanager_permissions,
     blob_fixup_phonemanager_settings_category,
     blob_fixup_ums_permissions,
 )
+from apk_fixups_camera_op15 import blob_fixup_opluscamera_component_safe_permission
+from apk_fixups_gallery_op15 import blob_fixup_oppogallery_wallpaper_attach_intent
 from apk_permissions_op15 import blob_fixup_securitypermission_safe_permissions
 
 
@@ -176,6 +177,7 @@ blob_fixups = {
     # strip undefined OEM permission gates. apktool unpack -> edit smali/manifest -> repack.
     'system_ext/priv-app/OplusCamera/OplusCamera.apk': blob_fixup()
         .call(blob_fixup_opluscamera_unpack)
+        .call(blob_fixup_opluscamera_component_safe_permission)
         .call(blob_fixup_opluscamera_font)
         .call(blob_fixup_opluscamera_strip_oem_perms)
         .apktool_pack()
@@ -183,7 +185,6 @@ blob_fixups = {
     'system_ext/priv-app/OppoGallery2/OppoGallery2.apk': blob_fixup()
         .call(blob_fixup_apktool_unpack_full)
         .call(blob_fixup_oppogallery_wallpaper_attach_intent)
-        .call(blob_fixup_opluscamera_strip_oem_perms)
         .apktool_pack()
         .stripzip(),
     'system_ext/app/FileManager/FileManager.apk': blob_fixup()

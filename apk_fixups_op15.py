@@ -119,68 +119,23 @@ def blob_fixup_fileencryption_biometric_enrollment(ctx, file, file_path, *args, 
         '    const/4 p0, 0x0\n\n'
         '    return p0\n'
     )
-    fixed = _replace_smali_method(data, 'public static final b(Landroid/content/Context;)Z', face_body)
-    fixed = _replace_smali_method(fixed, 'public static final c(Landroid/content/Context;)Z', fingerprint_body)
-    if fixed == data:
-        raise ValueError('FileEncryption biometric enrollment checks not patched')
-    smali.write_text(fixed, encoding='utf-8')
-
-
-def blob_fixup_oppogallery_wallpaper_attach_intent(ctx, file, file_path, *args, tmp_dir=None, **kwargs):
-    if tmp_dir is None:
-        return
-    replacement = (
-        '.method public final a(Landroid/app/Activity;Landroid/net/Uri;)V\n'
-        '    .locals 3\n'
-        '\n'
-        '    const-string p0, "activity"\n'
-        '\n'
-        '    invoke-static {p1, p0}, Lkotlin/jvm/internal/Intrinsics;->checkNotNullParameter(Ljava/lang/Object;Ljava/lang/String;)V\n'
-        '\n'
-        '    const-string p0, "pickedItem"\n'
-        '\n'
-        '    invoke-static {p2, p0}, Lkotlin/jvm/internal/Intrinsics;->checkNotNullParameter(Ljava/lang/Object;Ljava/lang/String;)V\n'
-        '\n'
-        '    new-instance v0, Landroid/content/Intent;\n'
-        '\n'
-        '    const-string v1, "android.intent.action.ATTACH_DATA"\n'
-        '\n'
-        '    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V\n'
-        '\n'
-        '    const-string v1, "image/*"\n'
-        '\n'
-        '    invoke-virtual {v0, p2, v1}, Landroid/content/Intent;->setDataAndType(Landroid/net/Uri;Ljava/lang/String;)Landroid/content/Intent;\n'
-        '\n'
-        '    const/4 v2, 0x1\n'
-        '\n'
-        '    invoke-virtual {v0, v2}, Landroid/content/Intent;->setFlags(I)Landroid/content/Intent;\n'
-        '\n'
-        '    const-string v2, "mimeType"\n'
-        '\n'
-        '    invoke-virtual {v0, v2, v1}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;\n'
-        '\n'
-        '    invoke-virtual {p1, v0}, Landroid/app/Activity;->startActivity(Landroid/content/Intent;)V\n'
-        '\n'
-        '    return-void\n'
-        '.end method\n'
+    face_signature = 'public static final b(Landroid/content/Context;)Z'
+    fingerprint_signature = 'public static final c(Landroid/content/Context;)Z'
+    fixed, face_count = re.subn(
+        rf'(?ms)^\.method {re.escape(face_signature)}\n.*?^\.end method',
+        f'.method {face_signature}\n{face_body}.end method',
+        data,
+        count=1,
     )
-    signature = 'public final a(Landroid/app/Activity;Landroid/net/Uri;)V'
-    patched = False
-    for smali in Path(tmp_dir).glob('smali*/com/oplus/gallery/pictureeditorpage/PictureEditorDM.smali'):
-        data = smali.read_text(encoding='utf-8')
-        fixed, count = re.subn(
-            rf'(?ms)^\.method {re.escape(signature)}\n.*?^\.end method',
-            replacement,
-            data,
-            count=1,
-        )
-        if count != 1:
-            continue
-        smali.write_text(fixed, encoding='utf-8')
-        patched = True
-        break
-    if not patched:
-        raise ValueError('OppoGallery2 wallpaper attach intent patch point not found')
+    fixed, fingerprint_count = re.subn(
+        rf'(?ms)^\.method {re.escape(fingerprint_signature)}\n.*?^\.end method',
+        f'.method {fingerprint_signature}\n{fingerprint_body}.end method',
+        fixed,
+        count=1,
+    )
+    if face_count != 1 or fingerprint_count != 1:
+        raise ValueError('FileEncryption biometric enrollment checks not patched exactly once')
+    smali.write_text(fixed, encoding='utf-8')
 
 
 def blob_fixup_phonemanager_permissions(ctx, file, file_path, *args, tmp_dir=None, **kwargs):
@@ -272,6 +227,13 @@ def blob_fixup_filemanager_select_dir_fallback(ctx, file, file_path, *args, tmp_
         '    invoke-virtual {v0}, Lcom/filemanager/common/view/BrowserPathBar;->getCurrentPath()Ljava/lang/String;\n'
         '    move-result-object v0\n'
         '    if-eqz v0, :cond_pathbar_skip\n'
+        '    iget-object p1, v1, Lkotlin/jvm/internal/Ref$ObjectRef;->element:Ljava/lang/Object;\n'
+        '    check-cast p1, Ljava/util/List;\n'
+        '    if-eqz p1, :cond_pathbar_set\n'
+        '    invoke-interface {p1}, Ljava/util/List;->isEmpty()Z\n'
+        '    move-result p1\n'
+        '    if-eqz p1, :cond_pathbar_skip\n'
+        '    :cond_pathbar_set\n'
         '    invoke-static {v0}, Lkotlin/collections/p;->e(Ljava/lang/Object;)Ljava/util/List;\n'
         '    move-result-object v0\n'
         '    iput-object v0, v1, Lkotlin/jvm/internal/Ref$ObjectRef;->element:Ljava/lang/Object;\n'
@@ -280,7 +242,7 @@ def blob_fixup_filemanager_select_dir_fallback(ctx, file, file_path, *args, tmp_
     log_idx = data.find(log_anchor)
     button_idx = data.find(button_anchor, log_idx)
     if log_idx == -1 or button_idx == -1:
-        return
+        raise ValueError('FileManager SelectDirPathPanelFragment path fallback anchors not found')
     if ':cond_pathbar_skip' not in data[log_idx:button_idx]:
         data = data[:button_idx] + new + data[button_idx:]
     smali.write_text(data, encoding='utf-8')

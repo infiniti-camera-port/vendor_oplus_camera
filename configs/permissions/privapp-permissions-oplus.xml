@@ -38,6 +38,7 @@
         <permission name="android.permission.WRITE_MEDIA_STORAGE"/>
         <permission name="android.permission.WRITE_SECURE_SETTINGS"/>
         <permission name="android.permission.SUBSCRIBE_TO_KEYGUARD_LOCKED_STATE"/>
+        <permission name="oppo.permission.OPPO_COMPONENT_SAFE"/>
      </privapp-permissions>
 
     <!-- OPLUS gallery -->
