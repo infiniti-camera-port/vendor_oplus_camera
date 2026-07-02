@@ -35,6 +35,7 @@ from apk_fixups_op15 import (
     blob_fixup_filemanager_cut_same_disk,
     blob_fixup_filemanager_select_dir_fallback,
     blob_fixup_filemanager_skip_osense_scene,
+    blob_fixup_oppogallery_wallpaper_attach_intent,
     blob_fixup_phonemanager_permission_controller,
     blob_fixup_phonemanager_permissions,
     blob_fixup_phonemanager_settings_category,
@@ -148,19 +149,6 @@ def blob_fixup_sdk_facebeauty(ctx, file, file_path, *args, tmp_dir=None, **kwarg
             return
 
 
-def blob_fixup_oppogallery_unpack(ctx, file, file_path, *args, tmp_dir=None, **kwargs):
-    # Gallery manifest-only fix: skip smali decode/reassembly (-s). Only the
-    # AndroidManifest is edited (strip undefined OEM permission gates), so the
-    # original classes*.dex are kept verbatim. This sidesteps the version-specific
-    # smali rejects that forced the whole OppoGallery2 apktool patch to be disabled
-    # manifest re-encode succeeds where smali reassembly
-    # of the obfuscated app did not. The 348 MB apk also makes a full smali decode
-    # prohibitively heavy.
-    if tmp_dir is None:
-        return
-    run_cmd([java_path, '-Xmx8g', '-jar', apktool_path, 'd', '-s', file_path, '-o', tmp_dir, '-f'])
-
-
 lib_fixups: lib_fixups_user_type = {
     # **lib_fixups already includes the clang RT ubsan and proto 3.9.1
     # fixups that were previously handled by the bash helper functions
@@ -192,16 +180,9 @@ blob_fixups = {
         .call(blob_fixup_opluscamera_strip_oem_perms)
         .apktool_pack()
         .stripzip(),
-    # OppoGallery2.apk: strip the undefined OEM permission gates (oppo/oplus/heytap)
-    # from its component declarations — same crash-class as the camera. The camera binds
-    # the gallery's predecode service (OplusPreTileDecodeService), which gated on the
-    # orphan oppo.permission.OPPO_COMPONENT_SAFE -> "Not allowed to bind to service"
-    # SecurityException -> camera dies on open. This is the manifest half of the disabled
-    # patches-gallery/0001 ("Get rid of oplus permissions"), re-applied via the same
-    # version-independent regex strip used for the camera. Manifest-only (-s unpack), so
-    # no smali reassembly (the reason #6 disabled the gallery patch set).
     'system_ext/priv-app/OppoGallery2/OppoGallery2.apk': blob_fixup()
-        .call(blob_fixup_oppogallery_unpack)
+        .call(blob_fixup_apktool_unpack_full)
+        .call(blob_fixup_oppogallery_wallpaper_attach_intent)
         .call(blob_fixup_opluscamera_strip_oem_perms)
         .apktool_pack()
         .stripzip(),
