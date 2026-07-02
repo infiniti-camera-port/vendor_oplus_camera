@@ -3,3 +3,7 @@ allow cameraserver data_system_camera_rus:file { read getattr setattr open };
 
 # cameraserver bumps the camera-app client RT priority (OOS grants; was permissive avc)
 allow cameraserver opluscamera_app:process setsched;
+
+# cameraserver reads OEM vendor_default_prop during OplusCamera pipeline setup
+# (benign getprop fallback; was permissive=0 avc spam).
+get_prop(cameraserver, vendor_default_prop)

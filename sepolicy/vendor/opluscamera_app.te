@@ -23,7 +23,7 @@ allow opluscamera_app opluscamera_app_data_file:dir { read open search write add
 # session setup; actual writes go through the HAL.
 allow opluscamera_app vendor_qdsp_device:chr_file { ioctl read open };
 # TEXT/OCR (preview_documen, RefFrameProcess) traverse + read /data/vendor/camera
-allow opluscamera_app vendor_camera_data_file:dir  { search read write open getattr };
+allow opluscamera_app vendor_camera_data_file:dir  { search read write open getattr add_name };
 allow opluscamera_app vendor_camera_data_file:file { read write create open getattr };
 
 # selinuxfs
