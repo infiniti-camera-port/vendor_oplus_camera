@@ -13,3 +13,9 @@ allow vendor_hal_cryptoeng_oplus vendor_dmabuf_qseecom_ta_heap_device:chr_file r
 allow vendor_hal_cryptoeng_oplus hidl_base_hwservice:hwservice_manager add;
 allow vendor_hal_cryptoeng_oplus system_app:dir search;
 allow vendor_hal_cryptoeng_oplus system_app:file r_file_perms;
+
+# AIUnit cloud-attestation apps (priv_app, e.g. the AI editor) look up the
+# cryptoeng HAL by name (vendor.oplus.hardware.cryptoeng.ICryptoeng/default).
+# protected_service only neverallows untrusted/isolated apps from finding it;
+# priv_app is trusted, so grant the lookup (was benign permissive=0 avc spam).
+allow priv_app vendor_hal_cryptoeng_oplus_service:service_manager find;
