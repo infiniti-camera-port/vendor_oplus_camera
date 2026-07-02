@@ -8,8 +8,10 @@ PRODUCT_PACKAGES += \
 #    oplus-framework
 
 # Init
-#PRODUCT_PACKAGES += \
-#    init.oplus.camera.rc
+# cryptoeng HAL service rc: device-tree-authored (see configs/init/) instead of
+# blob-fixup-patched out of the OEM odm extract, so it stays host_init_verifier-clean.
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/init/vendor.oplus.hardware.cryptoeng@1.0-service.rc:$(TARGET_COPY_OUT_ODM)/etc/init/vendor.oplus.hardware.cryptoeng@1.0-service.rc
 
 # Permissions
 PRODUCT_COPY_FILES += \

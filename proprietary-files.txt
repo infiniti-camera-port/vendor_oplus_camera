@@ -70,7 +70,6 @@ system_ext/framework/vendor.oplus.hardware.cryptoeng-V1.0-java.jar
 system_ext/lib64/vendor.oplus.hardware.cryptoeng-V1-ndk.so
 system_ext/lib64/vendor.oplus.hardware.cryptoeng@1.0.so
 odm/bin/hw/vendor.oplus.hardware.cryptoeng@1.0-service;DISABLE_DEPS
-odm/etc/init/vendor.oplus.hardware.cryptoeng@1.0-service_FDE.rc
 odm/etc/vintf/manifest/manifest_oplus_cryptoeng.xml
 odm/etc/permissions/vendor-oplus-hardware-cryptoeng.xml
 odm/firmware/secure_ta/cryptoeng.b00

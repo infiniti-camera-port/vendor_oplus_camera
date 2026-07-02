@@ -27,7 +27,6 @@ import re
 from apk_fixups_op15 import (
     blob_fixup_add_oplus_camera_stubs,
     blob_fixup_apktool_unpack_full,
-    blob_fixup_cryptoeng_init_rc,
     blob_fixup_cryptoeng_manifest,
     blob_fixup_cryptoeng_permissions_xml,
     blob_fixup_fileencryption_biometric_enrollment,
@@ -207,8 +206,6 @@ blob_fixups = {
         .call(blob_fixup_cryptoeng_permissions_xml),
     'odm/etc/permissions/vendor-oplus-hardware-cryptoeng.xml': blob_fixup()
         .call(blob_fixup_cryptoeng_permissions_xml),
-    'odm/etc/init/vendor.oplus.hardware.cryptoeng@1.0-service_FDE.rc': blob_fixup()
-        .call(blob_fixup_cryptoeng_init_rc),
     'odm/etc/vintf/manifest/manifest_oplus_cryptoeng.xml': blob_fixup()
         .call(blob_fixup_cryptoeng_manifest),
 }  # fmt: skip
