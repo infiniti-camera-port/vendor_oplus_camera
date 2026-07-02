@@ -35,10 +35,6 @@ from apk_fixups_op15 import (
     blob_fixup_filemanager_cut_same_disk,
     blob_fixup_filemanager_select_dir_fallback,
     blob_fixup_filemanager_skip_osense_scene,
-    blob_fixup_phonemanager_permission_controller,
-    blob_fixup_phonemanager_permissions,
-    blob_fixup_phonemanager_settings_category,
-    blob_fixup_ums_permissions,
 )
 from apk_fixups_camera_op15 import blob_fixup_opluscamera_component_safe_permission
 from apk_fixups_gallery_op15 import blob_fixup_oppogallery_wallpaper_attach_intent
@@ -195,12 +191,6 @@ blob_fixups = {
         .call(blob_fixup_filemanager_skip_osense_scene)
         .apktool_pack()
         .stripzip(),
-    'system_ext/priv-app/UMS/UMS.apk': blob_fixup()
-        .call(blob_fixup_apktool_unpack_full)
-        .call(blob_fixup_add_oplus_camera_stubs)
-        .call(blob_fixup_ums_permissions)
-        .apktool_pack()
-        .stripzip(),
     'system_ext/priv-app/FileEncryption/FileEncryption.apk': blob_fixup()
         .call(blob_fixup_apktool_unpack_full)
         .call(blob_fixup_add_oplus_camera_stubs)
@@ -211,14 +201,6 @@ blob_fixups = {
     'system_ext/app/SecurityPermission/SecurityPermission.apk': blob_fixup()
         .call(blob_fixup_apktool_unpack_full)
         .call(blob_fixup_securitypermission_safe_permissions)
-        .apktool_pack()
-        .stripzip(),
-    'system_ext/priv-app/PhoneManager/PhoneManager.apk': blob_fixup()
-        .call(blob_fixup_apktool_unpack_full)
-        .call(blob_fixup_add_oplus_camera_stubs)
-        .call(blob_fixup_phonemanager_permissions)
-        .call(blob_fixup_phonemanager_settings_category)
-        .call(blob_fixup_phonemanager_permission_controller)
         .apktool_pack()
         .stripzip(),
     'system_ext/etc/permissions/vendor-oplus-hardware-cryptoeng.xml': blob_fixup()

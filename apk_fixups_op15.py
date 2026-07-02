@@ -138,48 +138,8 @@ def blob_fixup_fileencryption_biometric_enrollment(ctx, file, file_path, *args, 
     smali.write_text(fixed, encoding='utf-8')
 
 
-def blob_fixup_phonemanager_permissions(ctx, file, file_path, *args, tmp_dir=None, **kwargs):
-    if tmp_dir is not None:
-        _add_permissions(tmp_dir, ('android.permission.WRITE_SECURE_SETTINGS',))
 
 
-def blob_fixup_ums_permissions(ctx, file, file_path, *args, tmp_dir=None, **kwargs):
-    if tmp_dir is not None:
-        _add_permissions(tmp_dir, ('android.permission.SET_ACTIVITY_WATCHER',))
-
-
-def blob_fixup_phonemanager_settings_category(ctx, file, file_path, *args, tmp_dir=None, **kwargs):
-    if tmp_dir is None:
-        return
-    manifest = _manifest(tmp_dir)
-    data = manifest.read_text(encoding='utf-8') if manifest.exists() else ''
-    old = 'android:value="com.oplus.settings.category.ia.phone_manager"'
-    new = 'android:value="com.android.settings.category.ia.more_security_privacy_settings"'
-    fixed = data.replace(old, new, 1)
-    if fixed != data:
-        manifest.write_text(fixed, encoding='utf-8')
-    elif new not in data:
-        raise ValueError('PhoneManager Settings category metadata not found')
-
-
-def blob_fixup_phonemanager_permission_controller(ctx, file, file_path, *args, tmp_dir=None, **kwargs):
-    if tmp_dir is None:
-        return
-    replaced = False
-    for path in Path(tmp_dir).glob('**/*'):
-        if not path.is_file() or path.suffix not in {'.smali', '.xml'}:
-            continue
-        data = path.read_text(encoding='utf-8', errors='ignore')
-        if 'com.google.android.permissioncontroller' not in data:
-            continue
-        fixed = data.replace(
-            'com.google.android.permissioncontroller',
-            'com.android.permissioncontroller',
-        )
-        path.write_text(fixed, encoding='utf-8')
-        replaced = True
-    if not replaced:
-        raise ValueError('PhoneManager permission controller package string not found')
 
 
 def blob_fixup_filemanager_cut_same_disk(ctx, file, file_path, *args, tmp_dir=None, **kwargs):
