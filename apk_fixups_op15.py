@@ -274,6 +274,22 @@ def blob_fixup_cryptoeng_init_rc(ctx, file, file_path, *args, tmp_dir=None, **kw
         '    restorecon_recursive /data/vendor_de/0/cryptoeng\n',
         1,
     )
+    # The OEM init parses a shell-style if/fi block (SM6450-only PPID licenses);
+    # AOSP init does not, and host_init_verifier fails the build on it. The SoC
+    # gate can never match infiniti (SM8850), so comment the block out.
+    fixed = fixed.replace(
+        '    if [ "$(getprop ro.soc.model)" = "SM6450" ]; then\n'
+        '        copy /vendor/etc/oplus_PPID_licenses.pfm /mnt/vendor/persist/data/pfm/licenses/oplus_PPID_licenses.pfm\n'
+        '        chmod 0600 /mnt/vendor/persist/data/pfm/licenses/oplus_PPID_licenses.pfm\n'
+        '        chown system system /mnt/vendor/persist/data/pfm/licenses/oplus_PPID_licenses.pfm\n'
+        '    fi\n',
+        '    #if [ "$(getprop ro.soc.model)" = "SM6450" ]; then\n'
+        '    #    copy /vendor/etc/oplus_PPID_licenses.pfm /mnt/vendor/persist/data/pfm/licenses/oplus_PPID_licenses.pfm\n'
+        '    #    chmod 0600 /mnt/vendor/persist/data/pfm/licenses/oplus_PPID_licenses.pfm\n'
+        '    #    chown system system /mnt/vendor/persist/data/pfm/licenses/oplus_PPID_licenses.pfm\n'
+        '    #fi\n',
+        1,
+    )
     path.write_text(fixed, encoding='utf-8')
 
 
