@@ -86,9 +86,11 @@ odm/firmware/secure_ta/cryptoeng.b07
 odm/firmware/secure_ta/cryptoeng.b08
 odm/firmware/secure_ta/cryptoeng.mdt
 odm/lib/lib_cryptoeng_api.so;DISABLE_DEPS
+odm/lib/libqsee_keybox_ca.so;DISABLE_DEPS
 odm/lib/vendor.oplus.hardware.cryptoeng-V1-ndk.so;MODULE_SUFFIX=_odm;DISABLE_DEPS
 odm/lib/vendor.oplus.hardware.cryptoeng@1.0.so;MODULE_SUFFIX=_odm;DISABLE_DEPS
 odm/lib64/lib_cryptoeng_api.so;DISABLE_DEPS
+odm/lib64/libqsee_keybox_ca.so;DISABLE_DEPS
 odm/lib64/vendor.oplus.hardware.cryptoeng-V1-ndk.so;MODULE_SUFFIX=_odm;DISABLE_DEPS
 odm/lib64/vendor.oplus.hardware.cryptoeng@1.0.so;MODULE_SUFFIX=_odm;DISABLE_DEPS
 my_stock/priv-app/PhoneManager/PhoneManager.apk:system_ext/priv-app/PhoneManager/PhoneManager.apk
