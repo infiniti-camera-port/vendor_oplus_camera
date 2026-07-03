@@ -90,6 +90,46 @@ odm/lib64/lib_cryptoeng_api.so;DISABLE_DEPS
 odm/lib64/libqsee_keybox_ca.so;DISABLE_DEPS
 odm/lib64/vendor.oplus.hardware.cryptoeng-V1-ndk.so;MODULE_SUFFIX=_odm;DISABLE_DEPS
 odm/lib64/vendor.oplus.hardware.cryptoeng@1.0.so;MODULE_SUFFIX=_odm;DISABLE_DEPS
+
+# FIDO CA HAL — cryptoeng device-attestation dependency.
+# cryptoeng@1.0-service is ;DISABLE_DEPS, so its FIDO DT_NEEDED must be listed
+# explicitly (same reason libqsee_keybox_ca.so was added in 178bf78). The two
+# daemons are cryptoeng's runtime IFidoDaemon binder servers; they QSEECom-load
+# the fidotap / fidoctap TAs. NEVER hand-edit any blob's DT_NEEDED.
+odm/bin/hw/vendor.oplus.hardware.fido.fidoca@1.0-service;DISABLE_DEPS
+odm/bin/hw/vendor.oplus.hardware.fido.fido2ca@1.0-service;DISABLE_DEPS
+odm/etc/init/vendor.oplus.hardware.fido.fidoca@1.0-service.rc
+odm/etc/init/vendor.oplus.hardware.fido.fido2ca@1.0-service.rc
+odm/etc/vintf/manifest/manifest_oplus_fido.xml
+odm/etc/vintf/manifest/manifest_oplus_fido2.xml
+odm/firmware/secure_ta/fidotap.b00
+odm/firmware/secure_ta/fidotap.b01
+odm/firmware/secure_ta/fidotap.b02
+odm/firmware/secure_ta/fidotap.b03
+odm/firmware/secure_ta/fidotap.b04
+odm/firmware/secure_ta/fidotap.b05
+odm/firmware/secure_ta/fidotap.b06
+odm/firmware/secure_ta/fidotap.b07
+odm/firmware/secure_ta/fidotap.b08
+odm/firmware/secure_ta/fidotap.mdt
+odm/firmware/secure_ta/fidoctap.b00
+odm/firmware/secure_ta/fidoctap.b01
+odm/firmware/secure_ta/fidoctap.b02
+odm/firmware/secure_ta/fidoctap.b03
+odm/firmware/secure_ta/fidoctap.b04
+odm/firmware/secure_ta/fidoctap.b05
+odm/firmware/secure_ta/fidoctap.b06
+odm/firmware/secure_ta/fidoctap.b07
+odm/firmware/secure_ta/fidoctap.b08
+odm/firmware/secure_ta/fidoctap.mdt
+odm/lib/libfido_factory.so;DISABLE_DEPS
+odm/lib/libfido2_factory.so;DISABLE_DEPS
+odm/lib/vendor.oplus.hardware.fido.fidoca-V1-ndk.so;DISABLE_DEPS
+odm/lib/vendor.oplus.hardware.fido.fido2ca-V1-ndk.so;DISABLE_DEPS
+odm/lib64/libfido_factory.so;DISABLE_DEPS
+odm/lib64/libfido2_factory.so;DISABLE_DEPS
+odm/lib64/vendor.oplus.hardware.fido.fidoca-V1-ndk.so;DISABLE_DEPS
+odm/lib64/vendor.oplus.hardware.fido.fido2ca-V1-ndk.so;DISABLE_DEPS
 system_ext/priv-app/OplusAppPlatform/OplusAppPlatform.apk
 
 my_product/lib64/libApsSuperEISPreviewJni.so:system_ext/lib64/libApsSuperEISPreviewJni.so
