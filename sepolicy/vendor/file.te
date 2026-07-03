@@ -5,3 +5,7 @@ type vendor_hal_cryptoeng_oplus_exec, exec_type, vendor_file_type, file_type;
 
 # OCCE shader-cache output tree (/mnt/occe/{shader,cache})
 type occe_data_file, file_type, data_file_type;
+
+# FIDO CA HAL daemon exec labels
+type vendor_hal_fido_oplus_exec,  exec_type, vendor_file_type, file_type;
+type vendor_hal_fido2_oplus_exec, exec_type, vendor_file_type, file_type;

@@ -594,3 +594,6 @@
 /(vendor|odm)/lib(64)?/libvega_common\.so    u:object_r:same_process_hal_file:s0
 /(vendor|odm)/lib(64)?/rfsa/adsp/libQnnHtpV81Skel\.so    u:object_r:same_process_hal_file:s0
 /(vendor|odm)/lib(64)?/rfsa/adsp/libQnnHtpV81\.so    u:object_r:same_process_hal_file:s0
+
+/(vendor|odm)/bin/hw/vendor\.oplus\.hardware\.fido\.fidoca@1\.0-service     u:object_r:vendor_hal_fido_oplus_exec:s0
+/(vendor|odm)/bin/hw/vendor\.oplus\.hardware\.fido\.fido2ca@1\.0-service    u:object_r:vendor_hal_fido2_oplus_exec:s0

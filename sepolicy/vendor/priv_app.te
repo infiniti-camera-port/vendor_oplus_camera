@@ -1,0 +1,6 @@
+# The AI Unit worker runs as priv_app (no dedicated seapp domain on this build;
+# stock provisions it as oplus_sandbox). It must discover the cryptoeng
+# attestation service to reach ICryptoeng/default — mirrors the system_app find
+# rule already in-tree (sepolicy/vendor/system_app.te). Kept in the vendor dir
+# (not private/) so the vendor-defined service type is in scope at policy link.
+allow priv_app vendor_hal_cryptoeng_oplus_service:service_manager find;
