@@ -5,5 +5,10 @@ allow cameraserver data_system_camera_rus:file { read getattr setattr open };
 allow cameraserver opluscamera_app:process setsched;
 
 # cameraserver reads OEM vendor_default_prop during OplusCamera pipeline setup
-# (benign getprop fallback; was permissive=0 avc spam).
-get_prop(cameraserver, vendor_default_prop)
+# (benign getprop fallback; was permissive=0 avc spam). cameraserver is a
+# coredomain, so an allow on vendor_default_prop:file trips the Treble property-
+# ownership neverallow (system/sepolicy/{public,private}/property.te). The read
+# is not functionally required (stock labels the prop with a typed context that
+# is absent on our build); silence the benign denial with dontaudit rather than
+# granting a coredomain access to a vendor property type.
+dontaudit cameraserver vendor_default_prop:file { read getattr map open };
