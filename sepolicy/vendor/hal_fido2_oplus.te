@@ -1,0 +1,17 @@
+# vendor.oplus.hardware.fido.fido2ca@1.0-service — FIDO2/CTAP CA HAL daemon.
+# cryptoeng's runtime IFidoDaemon binder server; QSEECom-loads the fidoctap TA.
+type vendor_hal_fido2_oplus, domain;
+init_daemon_domain(vendor_hal_fido2_oplus)
+
+add_service(vendor_hal_fido2_oplus, vendor_hal_fido2_oplus_service)
+binder_use(vendor_hal_fido2_oplus)
+binder_call(vendor_hal_fido2_oplus, servicemanager)
+
+# QSEE / TrustZone TA-load path (fidoctap) — mirrors hal_cryptoeng_oplus.
+allow vendor_hal_fido2_oplus tee_device:chr_file rw_file_perms;
+allow vendor_hal_fido2_oplus ion_device:chr_file rw_file_perms;
+allow vendor_hal_fido2_oplus vendor_dmabuf_qseecom_heap_device:chr_file r_file_perms;
+allow vendor_hal_fido2_oplus vendor_dmabuf_qseecom_ta_heap_device:chr_file r_file_perms;
+
+# TODO(first-boot audit2allow): residual running-service AVCs deferred — see the
+# note in hal_fido_oplus.te. Do NOT resolve them with a permissive domain.

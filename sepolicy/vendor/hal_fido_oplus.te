@@ -1,0 +1,22 @@
+# vendor.oplus.hardware.fido.fidoca@1.0-service — FIDO CA HAL daemon.
+# cryptoeng's runtime IFidoDaemon binder server; QSEECom-loads the fidotap TA.
+type vendor_hal_fido_oplus, domain;
+init_daemon_domain(vendor_hal_fido_oplus)
+
+add_service(vendor_hal_fido_oplus, vendor_hal_fido_oplus_service)
+binder_use(vendor_hal_fido_oplus)
+binder_call(vendor_hal_fido_oplus, servicemanager)
+
+# QSEE / TrustZone TA-load path (fidotap) — mirrors hal_cryptoeng_oplus.
+allow vendor_hal_fido_oplus tee_device:chr_file rw_file_perms;
+allow vendor_hal_fido_oplus ion_device:chr_file rw_file_perms;
+allow vendor_hal_fido_oplus vendor_dmabuf_qseecom_heap_device:chr_file r_file_perms;
+allow vendor_hal_fido_oplus vendor_dmabuf_qseecom_ta_heap_device:chr_file r_file_perms;
+
+# TODO(first-boot audit2allow): the residual running-service AVCs — fidotap
+# firmware_file read, the /data/vendor_de/[0-9]+/rpmb_status/.lii keybox-cache
+# store, and the commondcs security-event sink — are intentionally deferred to a
+# first-boot audit pass, not pre-granted here: the referenced OEM types are not
+# hosted in this tree, and the running attestation chain dead-ends at the TA
+# (qsee_km_get_encapsulated_key -> 10048) on an unlocked bootloader regardless.
+# Do NOT resolve them with a permissive domain.

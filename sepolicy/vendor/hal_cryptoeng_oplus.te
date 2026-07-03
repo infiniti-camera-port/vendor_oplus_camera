@@ -19,3 +19,16 @@ allow vendor_hal_cryptoeng_oplus system_app:file r_file_perms;
 # protected_service only neverallows untrusted/isolated apps from finding it;
 # priv_app is trusted, so grant the lookup (was benign permissive=0 avc spam).
 allow priv_app vendor_hal_cryptoeng_oplus_service:service_manager find;
+
+# --- FIDO CA attestation backend ---
+# cryptoeng waitForService()s both IFidoDaemon instances at attestation time
+# (binary strings: "Trying to connect to fido service").
+allow vendor_hal_cryptoeng_oplus vendor_hal_fido_oplus_service:service_manager find;
+allow vendor_hal_cryptoeng_oplus vendor_hal_fido2_oplus_service:service_manager find;
+binder_call(vendor_hal_cryptoeng_oplus, vendor_hal_fido_oplus)
+binder_call(vendor_hal_cryptoeng_oplus, vendor_hal_fido2_oplus)
+# TODO(first-boot audit2allow): cryptoeng's other runtime clients (commondcs
+# security-event sink, fingerprintpay) and its own fidotap/cryptoeng TA
+# firmware_file read + rpmb_status/.lii keybox-store /data rules are deferred to
+# an audit pass — the OEM service/data types are not hosted here and the chain
+# dead-ends at the TA (10048) on an unlocked bootloader. Do NOT use permissive.
