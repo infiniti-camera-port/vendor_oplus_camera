@@ -65,9 +65,4 @@
         <permission name="com.oppo.permission.safe.SAU"/>
         <permission name="com.oppo.permission.safe.SECURITY"/>
     </privapp-permissions>
-
-    <!-- OPLUS private safe -->
-    <privapp-permissions package="com.oplus.encryption">
-        <permission name="android.permission.WRITE_SECURE_SETTINGS"/>
-    </privapp-permissions>
 </permissions>
