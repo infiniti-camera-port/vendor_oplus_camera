@@ -25,19 +25,12 @@ import glob
 import re
 
 from apk_fixups_op15 import (
-    blob_fixup_add_oplus_camera_stubs,
     blob_fixup_apktool_unpack_full,
     blob_fixup_cryptoeng_manifest,
     blob_fixup_cryptoeng_permissions_xml,
-    blob_fixup_fileencryption_biometric_enrollment,
-    blob_fixup_fileencryption_permissions,
-    blob_fixup_filemanager_cut_same_disk,
-    blob_fixup_filemanager_select_dir_fallback,
-    blob_fixup_filemanager_skip_osense_scene,
 )
 from apk_fixups_camera_op15 import blob_fixup_opluscamera_component_safe_permission
 from apk_fixups_gallery_op15 import blob_fixup_oppogallery_wallpaper_attach_intent
-from apk_permissions_op15 import blob_fixup_securitypermission_safe_permissions
 
 
 def lib_fixup_system_ext_suffix(lib: str, partition: str, *args, **kwargs):
@@ -180,26 +173,6 @@ blob_fixups = {
     'system_ext/priv-app/OppoGallery2/OppoGallery2.apk': blob_fixup()
         .call(blob_fixup_apktool_unpack_full)
         .call(blob_fixup_oppogallery_wallpaper_attach_intent)
-        .apktool_pack()
-        .stripzip(),
-    'system_ext/app/FileManager/FileManager.apk': blob_fixup()
-        .call(blob_fixup_apktool_unpack_full)
-        .call(blob_fixup_add_oplus_camera_stubs)
-        .call(blob_fixup_filemanager_select_dir_fallback)
-        .call(blob_fixup_filemanager_cut_same_disk)
-        .call(blob_fixup_filemanager_skip_osense_scene)
-        .apktool_pack()
-        .stripzip(),
-    'system_ext/priv-app/FileEncryption/FileEncryption.apk': blob_fixup()
-        .call(blob_fixup_apktool_unpack_full)
-        .call(blob_fixup_add_oplus_camera_stubs)
-        .call(blob_fixup_fileencryption_permissions)
-        .call(blob_fixup_fileencryption_biometric_enrollment)
-        .apktool_pack()
-        .stripzip(),
-    'system_ext/app/SecurityPermission/SecurityPermission.apk': blob_fixup()
-        .call(blob_fixup_apktool_unpack_full)
-        .call(blob_fixup_securitypermission_safe_permissions)
         .apktool_pack()
         .stripzip(),
     'system_ext/etc/permissions/vendor-oplus-hardware-cryptoeng.xml': blob_fixup()

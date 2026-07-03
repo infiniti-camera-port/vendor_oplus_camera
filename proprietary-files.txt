@@ -4,7 +4,6 @@
 # Camera
 my_product/app/OplusCamera/OplusCamera.apk:system_ext/priv-app/OplusCamera/OplusCamera.apk;OVERRIDES=Camera2,GoogleCameraGo
 my_stock/priv-app/OppoGallery2/OppoGallery2.apk:system_ext/priv-app/OppoGallery2/OppoGallery2.apk
-my_stock/app/FileManager/FileManager.apk:system_ext/app/FileManager/FileManager.apk
 my_product/lib64/libAPSClient-cmd-jni.so:system_ext/lib64/libAPSClient-cmd-jni.so
 my_product/lib64/libAPSClient-jni.so:system_ext/lib64/libAPSClient-jni.so
 my_product/lib64/libAncFilter_jni.so:system_ext/lib64/libAncFilter_jni.so
@@ -61,9 +60,6 @@ system_ext/lib64/libHeifEncoderWrapper.so
 system_ext/lib64/libHeifWinBufExchg-jni.so;DISABLE_CHECKELF
 system_ext/lib64/libNativeWinBuffExchange.so
 system_ext/lib64/liboplusheifwriter.so
-my_stock/app/FileEncryption/FileEncryption.apk:system_ext/priv-app/FileEncryption/FileEncryption.apk
-system_ext/app/SecurityPermission/SecurityPermission.apk
-system_ext/app/SafeCenter/SafeCenter.apk
 system_ext/etc/permissions/vendor-oplus-hardware-cryptoeng.xml
 system_ext/framework/vendor.oplus.hardware.cryptoeng-V1-java.jar
 system_ext/framework/vendor.oplus.hardware.cryptoeng-V1.0-java.jar
